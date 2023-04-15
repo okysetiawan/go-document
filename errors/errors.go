@@ -12,7 +12,7 @@ const (
 
 type ErrorWrite struct {
 	cause error
-	code  int
+	code  Code
 }
 
 func (e *ErrorWrite) Error() string {
@@ -22,5 +22,9 @@ func (e *ErrorWrite) Error() string {
 func (e *ErrorWrite) Cause() error { return e.cause }
 
 func WithCode(cause error, code Code) *ErrorWrite {
-	return &ErrorWrite{}
+	switch cause.(type) {
+	case *ErrorWrite:
+		cause = cause.(*ErrorWrite).cause
+	}
+	return &ErrorWrite{cause: cause, code: code}
 }

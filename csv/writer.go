@@ -8,7 +8,7 @@ import (
 	"github.com/okysetiawan/go-document/internal"
 	"io"
 	"os"
-	"path"
+	"strings"
 )
 
 type (
@@ -85,7 +85,8 @@ func (w *writer) Buffer() (*bytes.Buffer, error) {
 }
 
 func (w *writer) Save(folderPath string) error {
-	file, err := os.Create(path.Join(folderPath, w.fileName))
+	path := strings.ReplaceAll(folderPath+"/"+w.fileName, "//", "/")
+	file, err := os.Create(path)
 	if err != nil {
 		return errors.WithCode(err, errors.FailedWriteToDevice)
 	}
