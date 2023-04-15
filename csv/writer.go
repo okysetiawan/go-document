@@ -63,11 +63,11 @@ func (w *writer) write(wr io.Writer) error {
 	csvWriter.Comma = w.delimiter
 
 	if err = csvWriter.Write(w.header); err != nil {
-		return errors.WithCode(err, errors.FailedWriteHeader)
+		return errors.WithCode(err, errors.CodeWriteHeader)
 	}
 
 	if err = csvWriter.WriteAll(w.rows); err != nil {
-		return errors.WithCode(err, errors.FailedWriteRows)
+		return errors.WithCode(err, errors.CodeWriteRows)
 	}
 
 	return nil
@@ -75,8 +75,12 @@ func (w *writer) write(wr io.Writer) error {
 
 // Buffer will write csv writer and return data on *bytes.Buffer format
 func (w *writer) Buffer() (*bytes.Buffer, error) {
-	buff := &bytes.Buffer{}
-	err := w.write(buff)
+	var (
+		buff = &bytes.Buffer{}
+		err  error
+	)
+
+	err = w.write(buff)
 	if err != nil {
 		return nil, err
 	}
@@ -85,10 +89,15 @@ func (w *writer) Buffer() (*bytes.Buffer, error) {
 }
 
 func (w *writer) Save(folderPath string) error {
-	path := strings.ReplaceAll(folderPath+"/"+w.fileName, "//", "/")
-	file, err := os.Create(path)
+	var (
+		path = strings.ReplaceAll(folderPath+"/"+w.fileName, "//", "/")
+		file *os.File
+		err  error
+	)
+
+	file, err = os.Create(path)
 	if err != nil {
-		return errors.WithCode(err, errors.FailedWriteToDevice)
+		return errors.WithCode(err, errors.CodeWriteToDevice)
 	}
 	defer file.Close()
 

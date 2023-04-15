@@ -1,13 +1,18 @@
 package errors
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Code int
 
 const (
-	FailedWriteHeader Code = iota + 1000
-	FailedWriteRows
-	FailedWriteToDevice
+	CodeWriteHeader Code = iota + 1000
+	CodeWriteRows
+	CodeWriteToDevice
+	CodeWriteTypesNil
+	CodeWriteTypesInvalid
 )
 
 type ErrorWrite struct {
@@ -21,6 +26,10 @@ func (e *ErrorWrite) Error() string {
 
 func (e *ErrorWrite) Cause() error { return e.cause }
 
+func (e *ErrorWrite) WithCode(code Code) error {
+	return WithCode(e.cause, code)
+}
+
 func WithCode(cause error, code Code) *ErrorWrite {
 	switch cause.(type) {
 	case *ErrorWrite:
@@ -28,3 +37,5 @@ func WithCode(cause error, code Code) *ErrorWrite {
 	}
 	return &ErrorWrite{cause: cause, code: code}
 }
+
+func New(msg string, args ...interface{}) *ErrorWrite { return &ErrorWrite{cause: errors.New(msg)} }
