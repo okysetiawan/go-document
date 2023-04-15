@@ -1,7 +1,7 @@
 package csv
 
-type Option func(csv *writer)
+type WriterOption func(csv *writer)
 
-func WithCommaDelimiter() Option         { return func(csv *writer) { csv.delimiter = Comma } }
-func WithSemicolonDelimiter() Option     { return func(csv *writer) { csv.delimiter = Semicolon } }
-func WithHeader(headers []string) Option { return func(csv *writer) { csv.header = headers } }
+func WithCommaDelimiter() WriterOption         { return func(csv *writer) { csv.delimiter = Comma } }
+func WithSemicolonDelimiter() WriterOption     { return func(csv *writer) { csv.delimiter = Semicolon } }
+func WithHeader(headers []string) WriterOption { return func(csv *writer) { csv.header = headers } }
