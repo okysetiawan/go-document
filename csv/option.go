@@ -1,11 +1,23 @@
 package csv
 
+import jsoniter "github.com/json-iterator/go"
+
+// WriterOption is function to update option to initialize csv.NewBuilder() and csv.NewWriterByType()
 type WriterOption func(csv *writer)
 
 func WithWriterCommaDelimiter() WriterOption { return func(csv *writer) { csv.delimiter = Comma } }
+
 func WithWriterSemicolonDelimiter() WriterOption {
 	return func(csv *writer) { csv.delimiter = Semicolon }
 }
+
 func WithWriterHeader(headers []string) WriterOption {
 	return func(csv *writer) { csv.header = headers }
+}
+
+// ReaderOption is function to update option to initialize csv.NewReader()
+type ReaderOption func(csv *reader)
+
+func WithReaderTag(tag string) ReaderOption {
+	return func(csv *reader) { csv.parser = jsoniter.Config{TagKey: tag}.Froze() }
 }
