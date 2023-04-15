@@ -26,7 +26,7 @@ type (
 	}
 )
 
-func New(opts ...Option) document.Writer {
+func New(opts ...Option) document.Builder {
 	builder := &writer{
 		delimiter: Semicolon,
 		header:    make([]string, 0),
@@ -42,14 +42,14 @@ func New(opts ...Option) document.Writer {
 
 // CreateSheet will store file name and create headers if exists, it will replace existing file name and header if its already exists.
 // CSV will only have 1 sheet.
-func (w *writer) CreateSheet(sheetName string, headers ...string) document.Writer {
+func (w *writer) CreateSheet(sheetName string, headers ...string) document.Builder {
 	w.fileName = sheetName
 	w.header = headers
 	return w
 }
 
 // AddRow will store rows on impl.rows temporary before Save() or Buffer()
-func (w *writer) AddRow(cells []interface{}) document.Writer {
+func (w *writer) AddRow(cells ...any) document.Builder {
 	w.rows = append(w.rows, internal.SliceAnyToString(cells))
 	return w
 }
