@@ -8,7 +8,7 @@ import (
 )
 
 func TestWriter_Buffer(t *testing.T) {
-	w := NewBuilder(WithSemicolonDelimiter())
+	w := NewBuilder(WithWriterSemicolonDelimiter())
 
 	var (
 		headers = []string{"Number", "Name"}
@@ -34,7 +34,7 @@ func TestWriter_Buffer(t *testing.T) {
 }
 
 func TestWriter_Save(t *testing.T) {
-	w := NewBuilder(WithSemicolonDelimiter())
+	w := NewBuilder(WithWriterSemicolonDelimiter())
 
 	var (
 		headers = []string{"Number", "Name"}
