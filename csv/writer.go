@@ -26,7 +26,7 @@ type (
 	}
 )
 
-func New(opts ...WriterOption) document.Builder {
+func NewBuilder(opts ...WriterOption) document.Builder {
 	builder := &writer{
 		delimiter: Semicolon,
 		header:    make([]string, 0),

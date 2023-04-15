@@ -27,7 +27,7 @@ func TestNewByType(t *testing.T) {
 		},
 	}
 
-	w, err := NewByType(table, "test_type.csv")
+	w, err := NewWriterByType(table, "test_type.csv")
 	assert.NoError(t, err)
 	assert.NotNil(t, w)
 
