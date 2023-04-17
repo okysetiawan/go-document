@@ -27,7 +27,7 @@ func TestNewByType(t *testing.T) {
 		},
 	}
 
-	w, err := NewByType(table, "test_type.csv")
+	w, err := NewWriterByType(table, "test_type.csv")
 	assert.NoError(t, err)
 	assert.NotNil(t, w)
 
@@ -51,7 +51,7 @@ func TestNewByType(t *testing.T) {
 	assert.NotNil(t, file)
 	defer file.Close()
 
-	// read actual content
+	// read actual raw
 	actualContent, err := io.ReadAll(file)
 	assert.NoError(t, err)
 	assert.EqualValues(t, expected, string(actualContent))

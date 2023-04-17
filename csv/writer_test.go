@@ -8,7 +8,7 @@ import (
 )
 
 func TestWriter_Buffer(t *testing.T) {
-	w := New(WithSemicolonDelimiter())
+	w := NewBuilder(WithWriterSemicolonDelimiter())
 
 	var (
 		headers = []string{"Number", "Name"}
@@ -34,7 +34,7 @@ func TestWriter_Buffer(t *testing.T) {
 }
 
 func TestWriter_Save(t *testing.T) {
-	w := New(WithSemicolonDelimiter())
+	w := NewBuilder(WithWriterSemicolonDelimiter())
 
 	var (
 		headers = []string{"Number", "Name"}
@@ -66,7 +66,7 @@ func TestWriter_Save(t *testing.T) {
 	assert.NotNil(t, file)
 	defer file.Close()
 
-	// read actual content
+	// read actual raw
 	actualContent, err := io.ReadAll(file)
 	assert.NoError(t, err)
 	assert.EqualValues(t, expected, actualContent)

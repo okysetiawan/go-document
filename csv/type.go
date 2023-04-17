@@ -5,14 +5,14 @@ import (
 	"github.com/okysetiawan/go-document/internal"
 )
 
-func NewByType(types any, filename string, options ...Option) (document.Writer, error) {
+func NewWriterByType(types any, filename string, options ...WriterOption) (document.Writer, error) {
 	var (
 		header []string
 		rows   [][]string
 		err    error
 	)
 
-	w := New(options...)
+	w := NewBuilder(options...)
 
 	header, err = internal.GetHeaderFromAny(types, "document")
 	if err != nil {

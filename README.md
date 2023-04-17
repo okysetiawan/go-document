@@ -4,7 +4,8 @@
 
 - [x] csv 
   - [x] Write Document
-  - [ ] Read Document
+  - [x] Read Document
+  - [ ] Unmarshal Document to Object
 - [ ] xlsx
     - [ ] Write Document
     - [ ] Read Document
