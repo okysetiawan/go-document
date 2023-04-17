@@ -1,12 +1,16 @@
 # go-document
 
  ## Features
+- Build a document
+- Write a document
+- Read a document
+- Supported Extension
+  - csv
 
-- [x] csv 
-  - [x] Write Document
-  - [x] Read Document
-  - [ ] Unmarshal Document to Object
-- [ ] xlsx
-    - [ ] Write Document
-    - [ ] Read Document
- 
+## Example
+
+You can see example implementation in unit test. For example, document writer for csv file can be seen in this [file](./csv/writer_test.go).
+
+# License
+
+Released under the [MIT License](./LICENSE).
