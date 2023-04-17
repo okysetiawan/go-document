@@ -2,7 +2,7 @@ package csv
 
 import (
 	"bytes"
-	jsoniter "github.com/json-iterator/go"
+	"encoding/csv"
 	"github.com/okysetiawan/go-document"
 	"github.com/okysetiawan/go-document/errors"
 	"io"
@@ -11,20 +11,13 @@ import (
 
 // reader is object represent to read csv file
 type reader struct {
-	// parser is attribute to Unmarshal content into destination object
-	parser jsoniter.API
-	// content containing document content
-	content []byte
+	// raw containing document raw
+	raw []byte
+	csv [][]string
 }
 
-func (r *reader) Scan(dest interface{}) error {
-
-	err := r.parser.Unmarshal(r.content, dest)
-	if err != nil {
-		return errors.WithCode(err, errors.CodeReadUnmarshal)
-	}
-
-	return nil
+func (r reader) Bytes() ([]byte, error) {
+	return r.raw, nil
 }
 
 // NewReaderIO to initialize document.Reader with io.Reader types
@@ -35,20 +28,16 @@ func NewReaderIO(ioReader io.Reader, options ...ReaderOption) (document.Reader, 
 		return nil, errors.WithCode(err, errors.CodeReadReader)
 	}
 
-	r := newReader(options...)
-	r.content = bytes
-	return r, nil
-}
-
-// NewReaderBuffer to initialize document.Reader with *bytes.Buffer types
-func NewReaderBuffer(buff *bytes.Buffer, options ...ReaderOption) (document.Reader, error) {
-
-	if buff == nil || buff.Len() == 0 {
-		return nil, errors.New("buff is nil or empty").WithCode(errors.CodeReadBufferEmpty)
+	if bytes == nil || len(bytes) == 0 {
+		return nil, errors.New("io.Reader is nil or empty").WithCode(errors.CodeReadEmpty)
 	}
 
-	r := newReader(options...)
-	r.content = buff.Bytes()
+	options = append(options, WithReaderBytes(bytes))
+	r, err := newReader(options...)
+	if err != nil {
+		return nil, err
+	}
+
 	return r, nil
 }
 
@@ -72,12 +61,21 @@ func NewReaderOpenFile(path string, options ...ReaderOption) (document.Reader, e
 	return NewReaderIO(file, options...)
 }
 
-func newReader(options ...ReaderOption) *reader {
-	r := &reader{parser: jsoniter.Config{TagKey: "json"}.Froze()}
+func newReader(options ...ReaderOption) (*reader, error) {
+	var (
+		r   = &reader{}
+		err error
+	)
 
 	for i := range options {
 		options[i](r)
 	}
 
-	return r
+	read := csv.NewReader(bytes.NewReader(r.raw))
+	r.csv, err = read.ReadAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
 }

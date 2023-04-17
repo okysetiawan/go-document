@@ -66,7 +66,7 @@ func TestWriter_Save(t *testing.T) {
 	assert.NotNil(t, file)
 	defer file.Close()
 
-	// read actual content
+	// read actual raw
 	actualContent, err := io.ReadAll(file)
 	assert.NoError(t, err)
 	assert.EqualValues(t, expected, actualContent)

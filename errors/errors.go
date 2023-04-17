@@ -17,7 +17,7 @@ const (
 
 const (
 	CodeReadReader Code = iota + 2000
-	CodeReadBufferEmpty
+	CodeReadEmpty
 	CodeReadFileFailed
 	CodeReadFileNotExist
 	CodeReadUnmarshal
@@ -49,3 +49,11 @@ func WithCode(cause error, code Code) *ErrorWrite {
 func New(msg string, args ...interface{}) *ErrorWrite { return &ErrorWrite{cause: errors.New(msg)} }
 
 func Is(err, target error) bool { return errors.Is(err, target) }
+
+func IsCode(err error, code Code) bool {
+	if errw, ok := err.(*ErrorWrite); ok {
+		return errw.code == code
+	}
+
+	return false
+}

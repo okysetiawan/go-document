@@ -1,7 +1,5 @@
 package csv
 
-import jsoniter "github.com/json-iterator/go"
-
 // WriterOption is function to update option to initialize csv.NewBuilder() and csv.NewWriterByType()
 type WriterOption func(csv *writer)
 
@@ -18,6 +16,6 @@ func WithWriterHeader(headers []string) WriterOption {
 // ReaderOption is function to update option to initialize csv.NewReader()
 type ReaderOption func(csv *reader)
 
-func WithReaderTag(tag string) ReaderOption {
-	return func(csv *reader) { csv.parser = jsoniter.Config{TagKey: tag}.Froze() }
+func WithReaderBytes(bytes []byte) ReaderOption {
+	return func(csv *reader) { csv.raw = bytes }
 }
